@@ -277,8 +277,6 @@ class Instance:
             self._on_dataset(request)
         elif type(request) == jcoms.OpenRequest:
             await self._on_open(request)
-        elif type(request) == jcoms.SaveRequest:
-            await self._on_save(request)
         elif type(request) == jcoms.InfoRequest:
             self._on_info(request)
         elif type(request) == jcoms.SettingsRequest:
@@ -878,6 +876,9 @@ class Instance:
             raise Exception(_('Unable to access analysis'))
 
     def open(self, path, title=None, is_temp=False, ext=None, options=None):
+
+        if options is None:
+            options = { }
 
         is_example = path.startswith('{{Examples}}')
         if is_example:

@@ -163,6 +163,10 @@ const Instance = Backbone.Model.extend({
 
         options = options || { };
 
+        // nuke any vestigal path ... this will be tidied up at some point
+        options = Object.assign({}, options);
+        delete options.path;
+
         return new ProgressStream(async (setProgress) => {
 
             let response;
@@ -258,7 +262,7 @@ const Instance = Backbone.Model.extend({
                 }
                 else {
 
-                    if (file === undefined || file === null || options.existing) {
+                    if (file === undefined || file === null) {
 
                         let url = 'open?p=';
 

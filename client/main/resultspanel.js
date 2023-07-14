@@ -353,6 +353,8 @@ const ResultsPanel = Backbone.View.extend({
         let event = {
             type: 'results',
             data: {
+                name: analysis.name,
+                ns: analysis.ns,
                 results: analysis.results,
                 options: analysis.options ? analysis.options.getValues() : {},
                 mode: this.model.settings().get('syntaxMode') ? 'text' : 'rich',
@@ -708,6 +710,7 @@ const ResultsPanel = Backbone.View.extend({
             let part = flatten(event.address);
 
             let saveOptions = {
+                path: undefined, // TBD
                 name: 'Image',
                 export: true,
                 part: part,
@@ -727,7 +730,8 @@ const ResultsPanel = Backbone.View.extend({
                 let result = await host.showSaveDialog(options);
                 if (result.cancelled)
                     return;
-                let status = await this.model.save(result.file, saveOptions);
+                saveOptions.path = result.file;
+                let status = await this.model.save(saveOptions);
                 if (host.isElectron === false && status.path) {
                     let source = path.basename(status.path);
                     let url = `dl/${ source }?filename=${ path.basename(result.file) }`;
@@ -737,6 +741,7 @@ const ResultsPanel = Backbone.View.extend({
             else {
 
                 let saveOptions = {
+                    path: undefined, // TBD
                     name: 'Image',
                     export: true,
                     part: part,
@@ -757,7 +762,8 @@ const ResultsPanel = Backbone.View.extend({
                 let result = await host.showSaveDialog(options);
                 if (result.cancelled)
                     return;
-                let status = await this.model.save(result.file, saveOptions);
+                saveOptions.path = result.file;
+                let status = await this.model.save(saveOptions);
                 if (host.isElectron === false && status.path) {
                     let source = path.basename(status.path);
                     let url = `dl/${ source }?filename=${ path.basename(result.file) }`;
