@@ -495,6 +495,22 @@ def SAMPLE(v, n: int, otherwise = None):
     return v
 
 
+@column_wise
+def WINSORIZE(values: float):
+    qtlo = float(quantile(list(values), 0.05))
+    qthi = float(quantile(list(values), 0.95))
+
+    def winsorsub(value: float):
+        if value < qtlo:
+            value = qtlo
+        elif value > qthi:
+            value =  qthi
+
+        return value
+
+    return list(map(lambda v: winsorsub(v), values))
+
+
 _RECODE_NOM = RECODE
 _RECODE_ORD = RECODE
 _RECODE_CONT = RECODE
