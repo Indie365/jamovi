@@ -108,6 +108,11 @@ def EXP(index, value: float):
 
 
 @row_wise
+def LOG(index, value: float, base: float):
+    return math.log(value, base)
+
+
+@row_wise
 def LN(index, value: float):
     return math.log(value)
 
@@ -500,7 +505,7 @@ def WINSORIZE(values: float):
     qtlo = float(quantile(list(values), 0.05))
     qthi = float(quantile(list(values), 0.95))
 
-    def winsorsub(value: float):
+    def winsorsub(value: float, qtlo: float, qthi: float):
         if value < qtlo:
             value = qtlo
         elif value > qthi:
@@ -508,7 +513,9 @@ def WINSORIZE(values: float):
 
         return value
 
-    return list(map(lambda v: winsorsub(v), values))
+    return list(map(lambda v: winsorsub(v, qtlo, qthi), values))
+
+
 
 
 _RECODE_NOM = RECODE
